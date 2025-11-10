@@ -26,20 +26,12 @@ class AccountGiveFlow extends user_flow_1.UserFlow {
         this.selectedCurrency = null;
         this.target = null;
         this.amount = null;
-		this.log = null;
     }
     start(interaction) {
         return __awaiter(this, void 0, void 0, function* () {
             const currencies = (0, currencies_database_1.getCurrencies)();
-			load tiers = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/tiers.json'), 'utf8'));	
             if (!currencies.size)
                 return (0, discord_1.replyErrorMessage)(interaction, `Не удалось выдать очки. ${constants_1.ErrorMessages.NoCurrencies}`);
-			if (ballCurrencyIds.includes(currencyId)) {const currentTotal = account.totalPoints || 0;const limit = tiers[account.rank || 1].limit;
-				if (currentTotal + amount > limit) {interaction.followUp({ content: 'Достигнут лимит ранга, баллы сгорели. Требуется повышение ранга.', ephemeral: true });
-				return;}
-			account.totalPoints = currentTotal + amount;
-			this.log = log;
-			account.log.push({ date: new Date().toISOString(), by: interaction.user.id, cat: currencyId, amount, comment: interaction.options.getString('comment') || '', type: 'give' });
             const target = interaction.options.getUser('target');
             const amount = interaction.options.getNumber('amount');
             if (!target || !amount)
@@ -105,19 +97,12 @@ class BulkAccountGiveFlow extends AccountGiveFlow {
     start(interaction) {
         return __awaiter(this, void 0, void 0, function* () {
             const currencies = (0, currencies_database_1.getCurrencies)();
-			load tiers = JSON.parse(fs.readFileSync(path.join(__dirname, '../../data/tiers.json'), 'utf8'));
             if (!currencies.size)
                 return (0, discord_1.replyErrorMessage)(interaction, `Не удалось выдать очки. ${constants_1.ErrorMessages.NoCurrencies}`);
             const targetRole = interaction.options.getRole('role');
             const amount = interaction.options.getNumber('amount');
             if (!targetRole || !amount)
                 return (0, discord_1.replyErrorMessage)(interaction, constants_1.ErrorMessages.InsufficientParameters);
-			if (ballCurrencyIds.includes(currencyId)) {const currentTotal = account.totalPoints || 0;const limit = tiers[account.rank || 1].limit;
-				if (currentTotal + amount > limit) {interaction.followUp({ content: 'Достигнут лимит ранга, баллы сгорели. Требуется повышение ранга.', ephemeral: true });
-				return;}
-			account.totalPoints = currentTotal + amount;
-			this.log = log;
-			account.log.push({ date: new Date().toISOString(), by: interaction.user.id, cat: currencyId, amount, comment: interaction.options.getString('comment') || '', type: 'givebulk' });
             this.targetRole = targetRole;
             this.amount = amount;
             this.initComponents();
@@ -171,7 +156,6 @@ class AccountTakeFlow extends user_flow_1.UserFlow {
             const amount = interaction.options.getNumber('amount');
             if (!target || !amount)
                 return (0, discord_1.replyErrorMessage)(interaction, constants_1.ErrorMessages.InsufficientParameters);
-			account.log.push({ date: new Date().toISOString(), by: interaction.user.id, cat: currencyId, amount, comment: interaction.options.getString('comment') || '', type: 'take' });
             this.target = target;
             this.amount = amount;
             this.initComponents();
