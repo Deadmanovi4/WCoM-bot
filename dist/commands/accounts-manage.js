@@ -16,10 +16,6 @@ const accounts_flows_1 = require("../user-flows/accounts-flows");
 const account_ui_1 = require("../user-interfaces/account-ui");
 const discord_1 = require("../utils/discord");
 const constants_1 = require("../utils/constants");
-const fs = require("fs"); // for load tiers
-const path = require("path");
-const accounts_database_1 = require("../database/accounts/accounts-database"); // for load/save accounts in upgrade
-
 exports.data = new discord_js_1.SlashCommandBuilder()
     .setName('accounts-manage')
     .setDescription('Управление аккаунтами')
@@ -43,11 +39,7 @@ exports.data = new discord_js_1.SlashCommandBuilder()
     .setDescription('Количество очков')
     .setRequired(true)
     .setMaxValue(99999999)
-    .setMinValue(1))
-	.addStringOption(option => option
-    .setName('comment')
-    .setDescription('Комментарий за что выдано')
-    .setRequired(false)))
+    .setMinValue(1)))
     .addSubcommand(subcommand => subcommand
     .setName('bulk-give')
     .setDescription('Выдать очки пользователям с соответствующей ролью')
@@ -72,19 +64,7 @@ exports.data = new discord_js_1.SlashCommandBuilder()
     .setName('amount')
     .setDescription('Количество очков')
     .setRequired(true)
-    .setMinValue(1))
-    .addStringOption(option => option
-    .setName('comment')
-    .setDescription('Комментарий за что забрано')
-    .setRequired(false)))
-    .addSubcommand(subcommand => subcommand
-    .setName('upgrade')
-    .setDescription('Повысить ранг пользователя')
-    .addUserOption(option => option
-    .setName('target')
-    .setDescription('Никнейм пользователя')
-    .setRequired(true)));
-    
+    .setMinValue(1)));
 function execute(_, interaction) {
     return __awaiter(this, void 0, void 0, function* () {
         const subCommand = interaction.options.getSubcommand();
@@ -110,25 +90,8 @@ function execute(_, interaction) {
                 const accountTakeFlow = new accounts_flows_1.AccountTakeFlow();
                 accountTakeFlow.start(interaction);
                 break;
-            case 'upgrade':
-                const target = interaction.options.getUser('target');
-                if (!target) {
-                    (0, discord_1.replyErrorMessage)(interaction, constants_1.ErrorMessages.InsufficientParameters);
-                    break;
-                }
-                const accounts = accounts_database_1.loadAccounts();
-                const account = accounts[target.id];
-                if (!account) {
-                    (0, discord_1.replyErrorMessage)(interaction, 'Аккаунт не найден');
-                    break;
-                }
-                account.rank = (account.rank || 1) + 1;
-                // account.totalPoints = 0; // если нужно сбросить, un comment
-                accounts_database_1.saveAccounts(accounts);
-                yield interaction.reply({ content: `Ранг ${target.username} повышен до ${account.rank}!`, ephemeral: true });
-                break;
             default:
-                (0, discord_1.replyErrorMessage)(interaction, constants_1.ErrorMessages.InvalidSubcommand);
+                yield (0, discord_1.replyErrorMessage)(interaction, constants_1.ErrorMessages.InvalidSubcommand);
                 break;
         }
     });
