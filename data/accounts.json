@@ -1,0 +1,27 @@
+{
+    "185077388474843136": {
+        "currencies": {
+            "af32d819-663e-4cef-ad12-eeb719b5a14f": {
+                "item": "af32d819-663e-4cef-ad12-eeb719b5a14f",
+                "amount": 1
+            },
+            "34a2676c-8fc6-4e92-b42b-659f69ed288b": {
+                "item": "34a2676c-8fc6-4e92-b42b-659f69ed288b",
+                "amount": 100
+            },
+            "d05c871a-580c-4df6-b67d-04ffb69bfb6f": {
+                "item": "d05c871a-580c-4df6-b67d-04ffb69bfb6f",
+                "amount": 100
+            }
+        },
+        "inventory": {
+            "fa4eddbf-dde0-44f5-8424-de92c9ec6f87": {
+                "item": {
+                    "id": "fa4eddbf-dde0-44f5-8424-de92c9ec6f87",
+                    "shopId": "00db5517-e442-4b54-922e-2662e2d21e7b"
+                },
+                "amount": 1
+            }
+        }
+    }
+}
